@@ -1,10 +1,15 @@
 #!/bin/bash -e
 
-AWS_PROFILE=$1
-IMAGE=$2
+if [ -z "$2" ] then
+  echo 'Usage: debug-aws <aws-profile> <ecs-task>'
+  exit 1
+fi
+
+AWS_PROFILE="$1"
+ECS_TASK="$2"
 
 AWS_REGION=$(aws --profile $AWS_PROFILE configure get region)
 
-arn=$(aws --profile $AWS_PROFILE --region $AWS_REGION ecs list-tasks --cluster $IMAGE | jq -r '.taskArns[0]')
+arn=$(aws --profile $AWS_PROFILE --region $AWS_REGION ecs list-tasks --cluster $ECS_TASK | jq -r '.taskArns[0]')
 
-aws --profile --region $AWS_REGION ecs execute-command --cluster $IMAGE --task "$arn" --interactive --command "/bin/bash"
+aws --profile $AWS_PROFILE --region $AWS_REGION ecs execute-command --cluster $ECS_TASK --task "$arn" --interactive --command "/bin/bash"

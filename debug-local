@@ -1,6 +1,11 @@
 #!/bin/bash -e
 
-IMAGE=$1
+if [ -z "$1" ] then
+  echo 'Usage: debug-local <image>'
+  exit 1
+fi
+
+IMAGE="$1"
 
 container_id=$(docker ps | grep "${IMAGE}:" | awk '{print $1}')
 

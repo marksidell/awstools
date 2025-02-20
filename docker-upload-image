@@ -1,9 +1,18 @@
 #!/bin/bash -ex
 
-AWS_PROFILE=$1
-IMAGE=$2
-BUILD=$3
-ECR_REPO=$4
+# Upload a docker image to AWS ECR
+# Write the ECR image URI to file image.<aws-profile>.artifact
+
+if [ -z "$4" ] then
+  echo 'Usage: docker-update_image <aws-profile> <image> <build> <ecr-repo>'
+  exit 1
+fi
+
+
+AWS_PROFILE="$1"
+IMAGE="$2"
+BUILD="$3"
+ECR_REPO="$4"
 
 AWS_ACCOUNT_ID=$(get-aws-account --profile $AWS_PROFILE)
 AWS_REGION=$(aws --profile $AWS_PROFILE configure get region)

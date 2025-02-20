@@ -1,5 +1,12 @@
 #!/bin/bash -e
 
-IMAGE=$1
+# Print the logs for a local running container
+
+if [ -z "$1" ] then
+  echo 'Usage: docker-logs <image>'
+  exit 1
+fi
+
+IMAGE="$1"
 
 docker logs $(docker ps | grep $IMAGE | awk '{print $1}')

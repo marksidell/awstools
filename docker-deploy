@@ -1,5 +1,13 @@
 #!/bin/bash -ex
 
+# Deploy an image in AWS ECR to a task in AWS ECS
+# Write the <task>:<version> to file task.<profile>.artifact
+
+if [ -z "$4" ] then
+  echo 'Usage: docker-debug <aws-profile> <ecr-repo> <ecs-task> <build>'
+  exit 1
+fi
+
 AWS_PROFILE="$1"
 ECR_REPO="$2"
 ECS_TASK="$3"
@@ -31,7 +39,7 @@ aws --profile $AWS_PROFILE ecs update-service \
   --task-definition "$ECS_TASK:$NEW_TASK_DEF_REVISION" \
   --force-new-deployment
 
-  cat << EOF > "task.${AWS_PROFILE}.artifact"
+cat << EOF > "task.${AWS_PROFILE}.artifact"
 $ECS_TASK:$NEW_TASK_DEF_REVISION
 EOF
 
