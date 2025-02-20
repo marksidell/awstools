@@ -1,0 +1,11 @@
+#!/bin/bash -e
+
+source aws-params
+
+aws --profile $AWS_PROFILE --region $AWS_REGION lambda invoke \
+  --function-name $AWS_LAMBDA \
+  --payload $(echo "$1" | base64) \
+  result.json
+
+cat result.json
+

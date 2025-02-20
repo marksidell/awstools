@@ -1,0 +1,19 @@
+#!/bin/bash -ex
+
+AWS_PROFILE=$1
+IMAGE=$2
+BUILD=$3
+ECR_REPO=$4
+
+AWS_ACCOUNT_ID=$(get-aws-account --profile $AWS_PROFILE)
+AWS_REGION=$(aws --profile $AWS_PROFILE configure get region)
+
+base_uri="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com"
+tag="$base_uri/${ECR_REPO}:${BUILD}"
+
+aws --profile $AWS_PROFILE ecr get-login-password | docker login --username AWS --password-stdin $base_uri
+
+docker tag ${IMAGE}:latest $tag
+docker push $tag
+
+echo $tag > image.${AWS_PROFILE}.artifact

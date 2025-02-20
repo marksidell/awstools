@@ -1,0 +1,37 @@
+#!/bin/bash -ex
+
+AWS_PROFILE="$1"
+ECR_REPO="$2"
+ECS_TASK="$3"
+BUILD="$4"
+
+AWS_ACCOUNT_ID=$(get-aws-account --profile $AWS_PROFILE)
+AWS_REGION=$(aws --profile $AWS_PROFILE configure get region)
+
+ECR_IMAGE="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPO}:${BUILD}"
+
+# Update ECS task definition with new image
+#
+TASK_DEF=$(aws --profile $AWS_PROFILE ecs describe-task-definition --task-definition "$ECS_TASK")
+
+NEW_TASK_DEF=$(jq --arg IMAGE "$ECR_IMAGE" '
+    .taskDefinition |
+    .containerDefinitions[0].image=$IMAGE |
+    del(.taskDefinitionArn, .revision, .status, .requiresAttributes, .compatibilities, .registeredAt, .registeredBy)
+    ' <<< "$TASK_DEF")
+
+NEW_TASK_DEF_RESULT=$(aws --profile $AWS_PROFILE ecs register-task-definition --cli-input-json "$NEW_TASK_DEF")
+NEW_TASK_DEF_REVISION=$(jq -r '.taskDefinition.revision' <<< "$NEW_TASK_DEF_RESULT")
+
+# Force ECS service to use the new task definition
+#
+aws --profile $AWS_PROFILE ecs update-service \
+  --cluster "$ECS_TASK" \
+  --service "$ECS_TASK" \
+  --task-definition "$ECS_TASK:$NEW_TASK_DEF_REVISION" \
+  --force-new-deployment
+
+  cat << EOF > "task.${AWS_PROFILE}.artifact"
+$ECS_TASK:$NEW_TASK_DEF_REVISION
+EOF
+

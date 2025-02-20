@@ -1,0 +1,5 @@
+#!/bin/bash -e
+
+source aws-params
+
+curl -XPOST "http://localhost:$LOCAL_PORT/2015-03-31/functions/function/invocations" -d "$1"

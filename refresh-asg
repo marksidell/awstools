@@ -1,0 +1,8 @@
+#!/bin/bash -e
+
+if [ -z "$2" ]; then
+  echo 'Usage: refresh-asg <profile> <asg>'
+  exit 1
+fi
+
+aws --profile $1 autoscaling start-instance-refresh --auto-scaling-group-name $2 --preferences '{"SkipMatching": false}'

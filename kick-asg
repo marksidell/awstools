@@ -1,0 +1,8 @@
+#!/bin/bash -e
+
+if [ -z "$3" ]; then
+  echo 'Usage: kick-asg <profile> <asg> <instance-id>'
+  exit 1
+fi
+
+aws --profile $1 autoscaling complete-lifecycle-action --auto-scaling-group-name $2 --lifecycle-hook-name launch --lifecycle-action-result CONTINUE --instance-id $3
