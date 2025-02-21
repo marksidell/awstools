@@ -3,7 +3,7 @@
 # Deploy an image in AWS ECR to a task in AWS ECS
 # Write the <task>:<version> to file task.<profile>.artifact
 
-if [ -z "$4" ] then
+if [ -z "$4" ]; then
   echo 'Usage: docker-debug <aws-profile> <ecr-repo> <ecs-task> <build>'
   exit 1
 fi

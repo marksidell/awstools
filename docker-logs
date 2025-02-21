@@ -2,7 +2,7 @@
 
 # Print the logs for a local running container
 
-if [ -z "$1" ] then
+if [ -z "$1" ]; then
   echo 'Usage: docker-logs <image>'
   exit 1
 fi

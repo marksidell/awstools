@@ -2,7 +2,7 @@
 
 # Kill a local running container
 
-if [ -z "$1" ] then
+if [ -z "$1" ]; then
   echo 'Usage: docker-kill <image>'
   exit 1
 fi

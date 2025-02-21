@@ -3,7 +3,7 @@
 # Run a local container.
 # Initialize env vars in the contaier with the credentials named by <aws-profile>.
 
-if [ -z "$3" ] then
+if [ -z "$3" ]; then
   echo 'Usage: docker-run <aws-profile> <image> <port-mapping>'
   exit 1
 fi

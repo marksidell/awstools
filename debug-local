@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-if [ -z "$1" ] then
+if [ -z "$1" ]; then
   echo 'Usage: debug-local <image>'
   exit 1
 fi
