@@ -1,5 +1,5 @@
 '''
-Print the credentials for an AWS profile from ~/.aws/credentials as env vars
+Print the credentials for an AWS profile from ~/.aws/credentials as env var declarations
 '''
 
 import os

@@ -1,5 +1,5 @@
 '''
-Obtain the AWS region specified for a given AWS profile
+Obtain the AWS account for a given AWS profile
 '''
 
 import argparse
