@@ -1,4 +1,4 @@
-#!/bin/bash -ex
+#!/bin/bash -e
 
 # Deploy an image in AWS ECR to a task in AWS ECS
 # Write the <task>:<version> to file task.<profile>.artifact

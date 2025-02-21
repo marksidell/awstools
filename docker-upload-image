@@ -1,4 +1,4 @@
-#!/bin/bash -ex
+#!/bin/bash -e
 
 # Upload a docker image to AWS ECR
 # Write the ECR image URI to file image.<aws-profile>.artifact
